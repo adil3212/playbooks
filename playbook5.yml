@@ -1,32 +1,30 @@
 # play1 - webservers
 - name: playbook for webservers
   hosts: test
+  vars:
+    pkgs: 
+       - { name: telnet, state: present }
+       - { name: vsftpd, state: present }
+       - { name: httpd, state: present }
+       - { name: tree, state: absent } 
+
   tasks:
-   - name: install telnet
+   - name: install packages
      yum:
-       name: telnet
-       state: present
-   - name: install vsftpd
-     yum:
-       name: vsftpd
-       state: present
-   - name:  install httpd
-     yum:
-       name: httpd
-       state: present
-   - name: start vsftpd service
+       name:  "{{ item.name  }}"
+       state: "{{ item.state }}"
+     loop: "{{ pkgs }}" 
+   
+   - name: starting services
      service:
-       name: vsftpd
+       name:  "{{ item.name }}"
        state: started
        enabled: yes
-   - name: start the httpd service
-     service:
-       name: httpd
-       state: started
+     loop: "{{ pkgs }}" 
+   
    - name: add httpd service to firewall
      firewalld:
        service: http
-
        permanent: true
        state: enabled
        immediate: yes

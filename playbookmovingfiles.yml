@@ -1,0 +1,26 @@
+---
+  - name: Moving files from one directory to another directory using Playbook
+    hosts: test
+    vars:
+      copy:  
+          - { src: /root/file2 , dest: /tmp/file5 }
+      
+      file:
+        - { path: /root/file2 , state: directory }
+
+    tasks:
+
+      - name: Creating Directories
+        file:
+          path: "{{ item.path }}"
+          state: "{{ item.state }}"
+        loop: "{{ file }}"
+
+      - name: moving files bitch
+        copy:
+          src: "{{ item.src }}"
+          dest: "{{ item.dest }}"
+          remote_src: yes
+        loop: "{{ copy }}"
+        tags: copying
+  

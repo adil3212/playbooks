@@ -1,0 +1,26 @@
+---
+ - name: CREATING OUR WEBSITE
+   hosts: test
+   tasks:
+        - name: Installing HTTPD
+          yum: 
+            name: httpd
+            state: present
+          
+        - name: Starting httpd
+          service:
+            name: httpd
+            state: started
+            enabled: true
+
+        - name: Copying Website content
+          copy: 
+              src: /tmp/web-content/index.html
+              dest: /var/www/html/index.html 
+
+        - name: Opening Port for httpd
+          firewalld:
+              service: http
+              permanent: yes
+              state: enabled
+              immediate: 1

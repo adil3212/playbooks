@@ -1,0 +1,11 @@
+---
+   - name: Removing a User johnd
+     hosts: test
+     tasks: 
+       -  name: Removing User johnd
+          user:
+            name: johnd
+            state: absent
+            remove: yes
+            #force: yes
+          

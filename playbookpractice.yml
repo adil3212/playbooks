@@ -1,0 +1,14 @@
+---
+  - name: Making files & Directories on Playbook
+    hosts: test
+    vars:
+      user:
+        - { name: laraib , state: present }
+        - { name: arshad , state: present }
+    tasks:
+      
+      - name: creating users on Playbook
+        user:
+          name: "{{ item.name}}"
+          state: "{{ item.state }}"
+        loop: "{{ user }}"

@@ -1,0 +1,34 @@
+---
+      - name: Using Registers
+        hosts: test
+        tasks:
+    
+        - name: System uptime
+          shell: uptime
+          register: command_uptime
+ 
+        - name: hostnames on the system
+          shell: hostname
+          register: command_hostname
+
+        - name: showing the kernel version
+          shell: lscpu
+          register: command_lscpu
+        
+        - name: block devices command
+          shell: lsblk
+          register: command_lsblk
+        
+        - name: stat
+          shell: stat
+          register: command_stat
+          src: /tmp
+        
+        - name: output names on the register  
+          debug: var={{ item }}
+          loop:
+          - command_uptime.stdout
+          - command_hostname.stdout
+          - command_lscpu.stdout
+          - command_lsblk.stdout
+          - command_stat.stdout

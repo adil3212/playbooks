@@ -1,0 +1,32 @@
+# play1 - webservers
+- name: playbook for webservers
+  hosts: test
+  tasks:
+   - name: install telnet
+     yum:
+       name: telnet
+       state: present
+   - name: install vsftpd
+     yum:
+       name: vsftpd
+       state: present
+   - name:  install httpd
+     yum:
+       name: httpd
+       state: present
+   - name: start vsftpd service
+     service:
+       name: vsftpd
+       state: started
+       enabled: yes
+   - name: start the httpd service
+     service:
+       name: httpd
+       state: started
+   - name: add httpd service to firewall
+     firewalld:
+       service: http
+
+       permanent: true
+       state: enabled
+       immediate: yes

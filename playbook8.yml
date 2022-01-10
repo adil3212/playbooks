@@ -1,0 +1,23 @@
+---
+  - name: This is my first playbook
+    hosts: test
+    vars: 
+      pkg: 
+        - vsftpd
+        - httpd
+  
+    tasks:
+    
+      - name: installing service
+        yum:
+          name: "{{ item }}"
+          state: installed
+        loop:  "{{ pkg }}"
+        tags: install   
+      
+      - name: Starting service
+        service: 
+          name: "{{ item }}"
+          state: started
+        loop: "{{ pkg }}"
+        tags: Love

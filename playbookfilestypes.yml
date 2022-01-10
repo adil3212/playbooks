@@ -1,0 +1,36 @@
+---
+  - name: Making files and Directories on playbook
+    hosts: test
+    vars:
+      user:  
+        -  { name: rehman , state: absent , remove: yes , force: yes }
+        -  { name: usman , state: absent  , remove: yes , force: yes }
+        -  { name: arshad , state: absent , remove: yes , force: yes }
+      file:  
+        - { name: file1 , state: absent }
+        - { name: file2 , state: absent } 
+        - { name: file3 , state: absent }
+  
+    tasks: 
+      
+      - name: Making users
+        user:
+          name: "{{ item.name }}"
+          state: "{{ item.state }}"
+          remove: "{{ item.remove }}"
+          force:  "{{ item.force }}"
+        loop: "{{ user }}"
+
+      - name: Making Directories
+        file:
+          path: /root/"{{ item.name }}"
+          state: "{{ item.state }}"
+          #recurse:  "{{ item.recurse }}"
+        loop: "{{ file }}"
+
+      - name: Copying files and transfering them onto another place
+        copy:
+          src: /root/"{{ item.name }}"
+          dest: /tmp/"{{ item.name }}"
+        loop: "{{ file }}"
+        tags: copying

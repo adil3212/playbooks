@@ -1,0 +1,15 @@
+---
+  - name: Learning loops
+    gather_facts: yes
+    hosts: test
+    connection: ssh
+    vars:
+      users:
+        - usman
+        - rehman
+    tasks:
+    - name: Adding Users
+      user:
+        name: "{{ item }}"
+        state:  present
+      loop: "{{ users }}"

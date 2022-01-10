@@ -1,0 +1,13 @@
+---
+  - name: Installing epel-release
+    hosts: all
+    tasks:
+      - name: Testing Machines
+        ping:
+        register: ping_nm
+      
+    
+      - name: Producing a output statement 
+        debug:
+          msg: "{{ ping_nm }}"
+        #when: ping_nm.stdout[0] | int < 0

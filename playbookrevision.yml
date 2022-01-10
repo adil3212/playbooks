@@ -1,0 +1,35 @@
+---
+  - name: Writing a playbook with what we have learned so far
+    hosts: test
+    vars:
+      pkg: 
+        - { name: httpd , state: installed , s_state: restarted }
+        - { name: vsftpd , state: installed , s_state: restarted }
+    
+    tasks:
+      - name: Installing a pkg
+        yum:
+          name: "{{ item.name }}"
+          state: "{{ item.state }}"
+          register: pkg
+        notify: Start the service
+        loop: "{{ pkg }}"
+        when: 
+          - ansible_hostname == "pokemon"
+          - ansible_hostname == "aadil"
+      - name: Using debug to print out values
+        debug:
+          msg: "{{ pkg }}"
+        tags: facts
+   
+      - name: Start the service
+        service:
+          name: "{{ item.name }}"
+          state: "{{ item.s_state }}" 
+        loop: "{{ pkg }}"
+        tags: 
+          - panic
+          - panic_again
+        when: 
+          - ansible_hostname == "pokemon"
+          #- ansible_hostname == "aadil"

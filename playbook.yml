@@ -1,0 +1,13 @@
+---
+ - name: Creating user johnd
+   hosts: test
+   tasks:
+        - name: Adding johnd
+          user: 
+            name: johnd
+            comment: "John Doe"
+            state: present
+            shell: /bin/bash
+            append: yes
+            uid: 3002
+            groups: wheel

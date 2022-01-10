@@ -1,0 +1,15 @@
+---
+    - name: Getting Used to Dealing With a Playbook
+      hosts: test
+      tasks:
+      - name: Installing nfs-utils
+        yum: 
+          name: nfs-utils
+          state: present
+    
+      - name: Starting nfs
+        service:
+          name: nfs
+          state: started
+          enabled: true
+

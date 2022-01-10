@@ -1,0 +1,7 @@
+---
+
+- name: Transfer and execute a script.
+  hosts: test
+  tasks:
+    - name: Copy and Execute the script 
+      script: /root/hello.sh

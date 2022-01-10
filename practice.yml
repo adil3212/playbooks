@@ -1,0 +1,14 @@
+---
+  - name: Adding Services to start
+    hosts: test
+    vars:
+        pkg: 
+            - httpd
+            - vsftpd
+    tasks:
+    
+      - name: Starting service
+        service: 
+          name: "{{ item }}"
+          state: started
+        loop: "{{ pkg }}"

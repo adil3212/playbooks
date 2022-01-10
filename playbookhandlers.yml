@@ -1,0 +1,51 @@
+---
+    - name: We will be working on how to use handlers on ansible-playbook
+      hosts: test
+      tasks:
+        - name: Changing port of the ssh service
+          lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '#Port 22'
+            line: Port 22
+          notify:
+            - add port in firewalld
+            - restart sshd
+        - name: installing telnet
+          yum:
+            name: telnet
+            state: present
+          notify: start the service
+
+        - name: installing httpd
+          yum:
+            name: httpd
+            state: present
+          notify:
+            - add httpd in firewalld
+            - start httpd
+      handlers:
+        - name: add port in firewalld
+          firewalld:
+            port: 3456/tcp
+            state: enabled
+            permanent: yes
+            immediate: yes
+
+        - name: restart sshd
+          service:
+            name: sshd
+            state: restarted
+        - name: start the service
+          service:
+            name: telnet
+            state: started
+        - name: add httpd in firewalld
+          firewalld:
+            service: http
+            state: enabled
+            permanent: yes
+            immediate: yes
+        - name: start httpd
+          service:
+            name: httpd
+            state: started

@@ -1,0 +1,31 @@
+# play 2 - appservers
+- name: Appserver related tasks
+  hosts: test
+  tasks:
+   - name: create user john
+     user:
+       name: john
+       uid: 3005
+       group: wheel
+       append: yes
+       shell: /bin/bash
+   - name: create directory
+     file:
+       dest: /tmp/repos
+       state: directory
+       owner: john
+       group: wheel
+       mode: 0766
+   - name: copy hosts file in appservers
+     copy:
+       src: /etc/hosts
+       dest: /tmp/hosts
+   - name: copy system related messages to control node
+     fetch:
+       src: /root/file1
+       dest: /tmp/var_messages
+       flat: yes
+   - name: set selinux in permissive mode
+     selinux:
+       policy: targeted
+       state: permissive

@@ -1,0 +1,27 @@
+---
+    - name: Creating files
+      hosts: test
+      vars:
+        files:
+          - files1
+          - files2
+          - files3
+        users:
+          - adnan
+          - johnd
+          - muree
+          - bitch
+      tasks:
+        - name: Adding a file
+          file:
+              path: /tmp/"{{ item }}"
+              state: absent
+          loop: "{{ files }}"
+        
+        - name: Removing users
+          user: 
+              name: "{{ item }}"
+              state: absent
+              remove: yes
+              force yes
+          loop: "{{ users }}"

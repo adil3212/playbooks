@@ -1,0 +1,14 @@
+- name: Gathering package facts and printing them out on the terminal
+  hosts: linoop
+  vars:
+  tasks:
+  - package_facts:
+     manager: "auto"
+
+  - name: "Apache test result"
+    debug: 
+     msg: "{{ item }} found"
+    when: "'{{ item }}' in ansible_facts.packages"
+    loop:
+      - sshd
+      - httpd

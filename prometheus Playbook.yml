@@ -1,0 +1,87 @@
+# https://www.fosslinux.com/10398/how-to-install-and-configure-prometheus-on-centos-7.htm
+---
+- name: Installing prometheus
+  hosts: linoop
+  tasks:
+    # First module
+    - name: Download prometheus tar file
+      get_url:
+        url: https://github.com/prometheus/prometheus/releases/download/v2.8.1/prometheus-2.8.1.linux-amd64.tar.gz
+        dest: /tmp/prometheus-2.8.1.linux-amd64.tar.gz
+    
+    # Second module
+    - name: Creating prometheus user
+      user:
+        name: prometheus
+        shell: /bin/false
+        system: yes
+
+    # Third module
+    - name: Creating directories
+      file:
+        name: "{{ item }}"
+        state: directory
+        owner: prometheus
+        group: prometheus
+      loop:
+        - /etc/prometheus
+        - /var/lib/prometheus
+
+    # Fourth module
+    - name: Extract the tarball
+      unarchive:
+        src: /tmp/prometheus-2.8.1.linux-amd64.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    # Fifth Module
+    - name: Copy the files 
+      copy:
+        src: "{{ item }}"
+        dest: /usr/local/bin
+        owner: prometheus
+        group: prometheus
+        remote_src: yes
+      loop:
+        - /tmp/prometheus-2.8.1.linux-amd64/prometheus
+        - /tmp/prometheus-2.8.1.linux-amd64/promtool
+
+    # Sixth Module
+    - name: Copy the files 
+      copy:
+        src: "{{ item }}"
+        dest: /etc/prometheus
+        owner: prometheus
+        group: prometheus
+        remote_src: yes
+      loop:
+        - /tmp/prometheus-2.8.1.linux-amd64/consoles
+        - /tmp/prometheus-2.8.1.linux-amd64/console_libraries
+    
+    # Seven module
+    - name: Copy the configuration file
+      template:
+        src: prometheus.yml.j2
+        dest: /etc/prometheus/prometheus.yml
+        owner: prometheus
+        group: prometheus
+
+    # Eigth module
+    - name: Copy the configuration file
+      template:
+        src: prometheus.service.j2
+        dest: /etc/systemd/system/prometheus.service
+        owner: prometheus
+        group: prometheus
+    
+    # Ninth Module
+    - name: Reload Daemon
+      systemd:
+        daemon_reload: yes
+    
+    # Tenth module
+    - name: Starting prometheus
+      systemd:
+        name: prometheus
+        state: started
+        enabled: yes

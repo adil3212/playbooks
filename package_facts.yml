@@ -1,3 +1,4 @@
+--- 
 - name: Gathering package facts and printing them out on the terminal
   hosts: linoop
   vars:

@@ -1,4 +1,4 @@
-# https://www.fosslinux.com/10398/how-to-install-and-configure-prometheus-on-centos-7.htm
+# Source: https://www.fosslinux.com/10398/how-to-install-and-configure-prometheus-on-centos-7.htm
 ---
 - name: Installing prometheus
   hosts: linoop
